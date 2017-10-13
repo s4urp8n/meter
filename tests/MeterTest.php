@@ -18,6 +18,8 @@ class MeterTest extends PHPUnit\Framework\TestCase
     public function testStart()
     {
 
+        Meter::getDuration(__METHOD__);
+
         $this->assertTrue(empty(Meter::getMeters()));
 
         Meter::start(__METHOD__);
@@ -43,6 +45,8 @@ class MeterTest extends PHPUnit\Framework\TestCase
         sleep(1);
 
         Meter::end(__METHOD__);
+
+        Meter::getDuration(__METHOD__);
 
         Meter::dump($dump);
         Meter::dump($dump);

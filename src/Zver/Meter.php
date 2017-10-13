@@ -12,7 +12,7 @@ namespace Zver {
             return number_format(microtime(true), 2, '.', '');
         }
 
-        protected static function getDuration($start, $end)
+        protected static function getTimeDuration($start, $end)
         {
             return number_format($end - $start, 2, '.', '');
         }
@@ -26,7 +26,7 @@ namespace Zver {
         {
             if (array_key_exists($key, static::$meters)) {
                 static::$meters[$key]['end'] = static::getTime();
-                static::$meters[$key]['duration'] = static::getDuration(static::$meters[$key]['start'], static::$meters[$key]['end']);
+                static::$meters[$key]['duration'] = static::getTimeDuration(static::$meters[$key]['start'], static::$meters[$key]['end']);
             }
         }
 
@@ -54,6 +54,16 @@ namespace Zver {
 
             }
 
+        }
+
+        public static function getDuration($key)
+        {
+            $meters = static::getMeters();
+            if (!empty($meters[$key]['duration'])) {
+                return $meters[$key]['duration'];
+            }
+
+            return false;
         }
 
     }
