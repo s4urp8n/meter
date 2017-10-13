@@ -40,5 +40,21 @@ namespace Zver {
             static::$meters = [];
         }
 
+        public static function dump($file)
+        {
+            $meters = static::getMeters();
+
+            if (!empty($meters)) {
+
+                ob_start();
+                print_r($meters);
+                $output = ob_get_clean();
+
+                file_put_contents($file, $output, FILE_APPEND | LOCK_EX);
+
+            }
+
+        }
+
     }
 }

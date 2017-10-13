@@ -22,7 +22,7 @@ class MeterTest extends PHPUnit\Framework\TestCase
 
         Meter::start(__METHOD__);
 
-        sleep(3);
+        sleep(1);
 
         Meter::end(__METHOD__);
 
@@ -33,6 +33,21 @@ class MeterTest extends PHPUnit\Framework\TestCase
         Meter::resetMeters();
 
         $this->assertTrue(empty(Meter::getMeters()));
+
+        $dump = __DIR__ . DIRECTORY_SEPARATOR . 'dump.log';
+
+        @unlink($dump);
+
+        Meter::start(__METHOD__);
+
+        sleep(1);
+
+        Meter::end(__METHOD__);
+
+        Meter::dump($dump);
+        Meter::dump($dump);
+
+        @unlink($dump);
 
     }
 
