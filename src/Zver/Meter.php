@@ -5,7 +5,17 @@ namespace Zver {
     class Meter
     {
 
-        protected static $meters = [];
+        protected $start    = null;
+        protected $duration = null;
+        protected $end      = null;
+
+        public static function prepareAndStart()
+        {
+            $meter = new static();
+            $meter->start();
+
+            return $meter;
+        }
 
         protected static function getTime()
         {
@@ -17,53 +27,30 @@ namespace Zver {
             return number_format($end - $start, 2, '.', '');
         }
 
-        public static function start($key)
+        public function start()
         {
-            static::$meters[$key] = ['start' => static::getTime()];
+            $this->start = static::getTime();
         }
 
-        public static function end($key)
+        public function end()
         {
-            if (array_key_exists($key, static::$meters)) {
-                static::$meters[$key]['end'] = static::getTime();
-                static::$meters[$key]['duration'] = static::getTimeDuration(static::$meters[$key]['start'], static::$meters[$key]['end']);
+            if (is_null($this->start)) {
+                throw new \Exception('Meter is not started');
+            }
+
+            if (is_null($this->end)) {
+                $this->end = static::getTime();
+                $this->duration = static::getTimeDuration($this->start, $this->end);
             }
         }
 
-        public static function getMeters()
+        public function getDuration()
         {
-            return static::$meters;
-        }
-
-        public static function resetMeters()
-        {
-            static::$meters = [];
-        }
-
-        public static function dump($file)
-        {
-            $meters = static::getMeters();
-
-            if (!empty($meters)) {
-
-                ob_start();
-                print_r($meters);
-                $output = ob_get_clean();
-
-                file_put_contents($file, $output, FILE_APPEND | LOCK_EX);
-
+            if (is_null($this->end)) {
+                $this->end();
             }
 
-        }
-
-        public static function getDuration($key)
-        {
-            $meters = static::getMeters();
-            if (!empty($meters[$key]['duration'])) {
-                return $meters[$key]['duration'];
-            }
-
-            return false;
+            return $this->duration;
         }
 
     }
