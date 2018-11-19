@@ -6,7 +6,6 @@
         colors="true"
         processIsolation="false"
         stopOnFailure="true"
-        syntaxCheck="false"
         backupGlobals="false"
         bootstrap="tests/bootstrap.php">
     <testsuites>
